@@ -67,23 +67,23 @@ SQLQ[10] = ""
 SQLA[10] ='[["ID", "UN"], ["U003", "davidwillis"], ["U005", "sallydavis"], ["U001", "juliesmith"], ["U002", "annegrey"], ["U004", "johnroberts"]]'
 
 # display the number of caches owned by the user with the UID U003
-SQLQ[11] = ""
+SQLQ[11] = "SELECT COUNT(ouid) FROM owners WHERE OUID = 'U003';"
 SQLA[11] ='[["COUNT(ouid)"], [3]]'
 
 # display the number of trackables owned by the user with the UID U001 and rename the column 'Number of posts'
-SQLQ[12] = ""
+SQLQ[12] = "SELECT COUNT(TID) AS 'Number of trackables' FROM trackables WHERE UID = 'U001';"
 SQLA[12] ='[["Number of trackables"], [1]]'
 
 # display  each UID and the number of trackables for each user under the column name 'Number of trackables'
-SQLQ[13] = ""
+SQLQ[13] = "SELECT UID, COUNT(TID) AS 'Number of trackables' FROM trackables GROUP BY TID;"
 SQLA[13] ='[["UID", "Number of trackables"], ["U001", 1], ["U002", 1]]'
 
 # display  UID and the number of trackables from the user with the uid 'U003' under the column name 'Number of trackables'
-SQLQ[14] = ""
+SQLQ[14] = "SELECT UID, COUNT(TID) AS 'Number of trackables' FROM trackables WHERE UID = 'U003' GROUP BY TID;"
 SQLA[14] ='[["UID", "Number of trackables"]]'
 
 # display  UID, FNAME, LNAME and the number of caches each of the users own under the column name 'Number of caches owned'
-SQLQ[15] = ""
+SQLQ[15] = "SELECT OUID, FNAME, LNAME, COUNT(OUID) AS 'Number of caches owned' FROM users, owners WHERE OUID = UID GROUP BY OUID;"
 SQLA[15] ='[["OUID", "FNAME", "LNAME", "Number of caches owned"], ["U001", "Julie", "Smith", 1], ["U002", "Anne", "Grey", 1], ["U003", "David", "Willis", 3]]'
 
 # display cacheid, UID, fname, lname of each cache along with the name of the user who approved the cache uid, fname, lname
