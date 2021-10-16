@@ -1,0 +1,39 @@
+# display all data for all users
+SQLQ[0] = "SELECT * FROM users;"
+SQLA[0] ='[["UID", "GID", "FNAME", "LNAME", "USERNAME", "PASSWORD", "EMAIL"], ["U001", "MadCacher", "Julie", "Smith", "juliesmith", nil, "j.smith@cache.com"], ["U002", "TheWanderer", "Anne", "Grey", "annegrey", nil, "a.grey@cache.com"], ["U003", "AlwaysLost", "David", "Willis", "davidwillis", nil, "d.willis@cache.com"], ["U004", "WellieWalker", "John", "Roberts", "johnroberts", nil, "j.roberts@cache.com"], ["U005", "GoneCaching", "Sally", "Davis", "sallydavis", nil, "s.davis@cache.com"]]'
+
+# display  UID and USERNAME data for all users  
+SQLQ[1] = "SELECT UID, USERNAME FROM users;"
+SQLA[1] ='[["UID", "USERNAME"], ["U001", "juliesmith"], ["U002", "annegrey"], ["U003", "davidwillis"], ["U004", "johnroberts"], ["U005", "sallydavis"]]'
+
+# display  UID and USERNAME data for all users and rename colmns UID 'UserID' and 'USERNAME' UN 
+SQLQ[2] = "SELECT UID AS UserID, USERNAME AS UN FROM users;"
+SQLA[2] ='[["UserID", "UN"], ["U001", "juliesmith"], ["U002", "annegrey"], ["U003", "davidwillis"], ["U004", "johnroberts"], ["U005", "sallydavis"]]'
+
+# display  UID and USERNAME data for user with UID 'U002'
+SQLQ[3] = "SELECT UID, USERNAME FROM users WHERE UID = 'U002';"
+SQLA[3] ='[["UID", "USERNAME"], ["U002", "annegrey"]]'
+
+# display UID, USERNAME, OCACHEID, OCREATED data for cache owned by the user with the UID U002 using an inner join
+SQLQ[4] = "SELECT UID, USERNAME, OCACHEID, OCREATED FROM users JOIN owners ON users.UID = owners.OUID WHERE UID = 'U002';"
+SQLA[4] ='[["UID", "USERNAME", "OCACHEID", "OCREATED"], ["U002", "annegrey", "C002", "13/06/2021"]]'
+
+# display UID, USERNAME, OCACHEID, OCREATED data for cache owned by the user with the UID U002  not using the JOIN keyword
+SQLQ[5] = "SELECT UID, USERNAME, OCACHEID, OCREATED FROM users,owners WHERE users.UID = owners.OUID AND UID = 'U002';"
+SQLA[5] ='[["UID", "USERNAME", "OCACHEID", "OCREATED"], ["U002", "annegrey", "C002", "13/06/2021"]]'
+
+# display UID, USERNAME, TID, TNAME data for trackables owned by the user with the UID U001 not using the JOIN keyword
+SQLQ[6] = "SELECT users.UID, users.USERNAME, trackables.TID, trackables.TNAME FROM users, trackables WHERE users.UID = trackables.UID AND users.UID = 'U001';"
+SQLA[6] ='[["UID", "USERNAME", "TID", "TNAME"], ["U001", "juliesmith", "T001", "TagAlong"]]'
+
+# display UID, USERNAME, CACHEID, CNAME data for all caches owned by the user with the UID U003 not using the JOIN keyword
+SQLQ[7] = "SELECT users.UID, users.USERNAME, caches.CACHEID, caches.CNAME FROM users, caches, owners WHERE owners.OUID = users.UID AND caches.CACHEID = owners.OCACHEID AND users.UID = 'U003';"
+SQLA[7] ='[["UID", "USERNAME", "CACHEID", "CNAME"], ["U003", "davidwillis", "C003", "WhereAmI"], ["U003", "davidwillis", "C004", "SpiderHole"], ["U003", "davidwillis", "C005", "ViewPoint"]]'
+
+# display UID, USERNAME, CACHEID, CNAME data for all active caches owned by the user with the UID U003 not using the JOIN keyword and using the table alias u for users, o for owners and c for caches
+SQLQ[8] = "SELECT u.UID, u.USERNAME, c.CACHEID, c.CNAME FROM users AS u, caches AS c, owners AS o WHERE o.OUID = u.UID AND c.CACHEID = o.OCACHEID AND u.UID = 'U003' AND c.CSTATUS = 'Active';"
+SQLA[8] ='[["UID", "USERNAME", "CACHEID", "CNAME"], ["U003", "davidwillis", "C003", "WhereAmI"], ["U003", "davidwillis", "C004", "SpiderHole"]]'
+
+# display  GID, UID and USERNAME data for all users in GID descending order 
+SQLQ[9] = "SELECT GID, UID, USERNAME FROM users ORDER BY GID DESC;"
+SQLA[9] ='[["GID", "UID", "USERNAME"], ["WellieWalker", "U004", "johnroberts"], ["TheWanderer", "U002", "annegrey"], ["MadCacher", "U001", "juliesmith"], ["GoneCaching", "U005", "sallydavis"], ["AlwaysLost", "U003", "davidwillis"]]'
