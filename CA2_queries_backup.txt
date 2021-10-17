@@ -59,3 +59,71 @@ SQLA[14] ='[["UID", "Number of trackables"]]'
 # display  UID, FNAME, LNAME and the number of caches each of the users own under the column name 'Number of caches owned'
 SQLQ[15] = "SELECT OUID, FNAME, LNAME, COUNT(OUID) AS 'Number of caches owned' FROM users, owners WHERE OUID = UID GROUP BY OUID;"
 SQLA[15] ='[["OUID", "FNAME", "LNAME", "Number of caches owned"], ["U001", "Julie", "Smith", 1], ["U002", "Anne", "Grey", 1], ["U003", "David", "Willis", 3]]'
+
+# display cacheid, UID, fname, lname of each cache along with the name of the user who approved the cache uid, fname, lname
+SQLQ[16] = "SELECT o.OCACHEID, o.OUID, u.FNAME, u.LNAME, us.UID, us.FNAME, us.LNAME
+FROM users AS u, owners AS o, users AS us, owners AS ow
+WHERE ow.OCACHEID = o.OCACHEID
+AND us.UID = o.AUID
+AND u.UID = o.OUID;"
+SQLA[16] ='[["OCACHEID", "OUID", "FNAME", "LNAME", "UID", "FNAME", "LNAME"], ["C001", "U001", "Julie", "Smith", "U002", "Anne", "Grey"], ["C002", "U002", "Anne", "Grey", "U003", "David", "Willis"], ["C003", "U003", "David", "Willis", "U002", "Anne", "Grey"], ["C004", "U003", "David", "Willis", "U002", "Anne", "Grey"], ["C005", "U003", "David", "Willis", "U002", "Anne", "Grey"]]'
+
+# display only those cacheid where cachers have reported not finding  along with the number of times this has occurred.
+SQLQ[17] = "SELECT c.CACHEID, COUNT(cl.CFOUND) AS 'Number of times not found'
+FROM caches AS c, clogs AS cl
+WHERE c.CACHEID = cl.CACHEID
+AND cl.CFOUND = 'NotFound'
+GROUP BY c.CACHEID;"
+SQLA[17] ='[["CACHEID", "Number of times not found"], ["C001", 1], ["C004", 1]]'
+
+###Answer for 18 but I think the answer is backwards. 
+SELECT t.TID, COUNT(cl.CACHEID) as 'Number of caches visited'
+FROM trackables as t, clogs AS cl
+WHERE t.UID = cl.UID
+GROUP BY t.UID;
+
+# display the UID, CACHEID, number of times cache found and date with which user acheived its 'first-time-found'.
+SQLQ[19] = "SELECT UID, CACHEID, COUNT(cacheid), MIN(date)
+FROM clogs
+WHERE CFOUND != 'NotFound'
+GROUP BY CACHEID;"
+SQLA[19] ='[["UID", "CACHEID", "COUNT(cacheid)", "MIN(date)"], ["U002", "C001", 2, "20/06/2021"], ["U002", "C002", 3, "20/06/2021"], ["U002", "C003", 2, "21/06/2021"]]'
+
+# display the UID, FNAME, LNAME, CACHEID, number of times cache found and date with which user acheived its 'first-time-found'.
+SQLQ[20] = "SELECT cl.UID, u.FNAME, u.LNAME, cl.CACHEID, COUNT(cacheid), MIN(date)
+FROM clogs AS cl, users AS u
+WHERE cl.CFOUND != 'NotFound'
+AND u.UID = cl.UID
+GROUP BY cl.CACHEID;"
+SQLA[20] ='[["UID", "FNAME", "LNAME", "CACHEID", "COUNT(cacheid)", "MIN(date)"], ["U002", "Anne", "Grey", "C001", 2, "20/06/2021"], ["U002", "Anne", "Grey", "C002", 3, "20/06/2021"], ["U002", "Anne", "Grey", "C003", 2, "21/06/2021"]]'
+
+# display the caches where trackables have visited but not been left'.
+SQLQ[21] = "SELECT CID, TID 
+FROM tlogs 
+WHERE TSTATUS = 'Visited';"
+SQLA[21] ='[["CID", "TID"], ["C002", "T001"]]'
+
+#display the trackables which have been removed and visited a cache the same day
+SQLQ[22] = "SELECT t.TID
+FROM tlogs AS t, tlogs AS tl
+WHERE t.date = tl.date
+AND t.TSTATUS = 'Visited'
+AND tl.TSTATUS = 'Removed';"
+SQLA[22] ='[["TID"], ["T001"]]'
+
+#display the caches in order of the most times been found
+SQLQ[23] = "SELECT CACHEID, COUNT(cfound)
+FROM clogs
+WHERE CFOUND = 'FoundIt'
+GROUP BY CACHEID
+ORDER BY COUNT(CFOUND) DESC, CACHEID ASC;"
+SQLA[23] ='[["CACHEID", "COUNT(cfound)"], ["C002", 3], ["C001", 2], ["C003", 2]]'
+
+#display the caches in order of the most times been found 3 or more times
+SQLQ[24] = "SELECT CACHEID, COUNT(cfound)
+FROM clogs
+WHERE CFOUND = 'FoundIt'
+GROUP BY CACHEID
+HAVING COUNT(CFOUND) >= 3
+ORDER BY COUNT(CFOUND) DESC;"
+SQLA[24] ='[["CACHEID", "COUNT(cfound)"], ["C002", 3]]'
