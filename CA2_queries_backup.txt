@@ -39,6 +39,10 @@ SQLQ[9] = "SELECT GID, UID, USERNAME FROM users ORDER BY GID DESC;"
 SQLA[9] ='[["GID", "UID", "USERNAME"], ["WellieWalker", "U004", "johnroberts"], ["TheWanderer", "U002", "annegrey"], ["MadCacher", "U001", "juliesmith"], ["GoneCaching", "U005", "sallydavis"], ["AlwaysLost", "U003", "davidwillis"]]'
 
 ###10 questions and answer do not match up, waiting for teacher reply
+made a query based on results outlined and it shows as correct. 
+# display  GID, UID and USERNAME data for all users in GID ascendng order and rename colmns UID ID and username UN 
+SQLQ[10] = "SELECT UID AS 'ID', USERNAME AS 'UN' FROM users ORDER BY GID ASC;"
+SQLA[10] ='[["ID", "UN"], ["U003", "davidwillis"], ["U005", "sallydavis"], ["U001", "juliesmith"], ["U002", "annegrey"], ["U004", "johnroberts"]]'
 
 # display the number of caches owned by the user with the UID U003
 SQLQ[11] = "SELECT COUNT(ouid) FROM owners WHERE OUID = 'U003';"

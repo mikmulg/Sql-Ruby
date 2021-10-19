@@ -39,7 +39,7 @@ SQLQ[3] = "SELECT UID, USERNAME FROM users WHERE UID = 'U002';"
 SQLA[3] ='[["UID", "USERNAME"], ["U002", "annegrey"]]'
 
 # display UID, USERNAME, OCACHEID, OCREATED data for cache owned by the user with the UID U002 using an inner join
-SQLQ[4] = "SELECT UID, USERNAME, OCACHEID, OCREATED FROM users JOIN owners ON users.UID = owners.OUID WHERE UID = 'U002';"
+SQLQ[4] = "SELECT UID, USERNAME, OCACHEID, OCREATED FROM users INNER JOIN owners ON users.UID = owners.OUID WHERE UID = 'U002';"
 SQLA[4] ='[["UID", "USERNAME", "OCACHEID", "OCREATED"], ["U002", "annegrey", "C002", "13/06/2021"]]'
 
 # display UID, USERNAME, OCACHEID, OCREATED data for cache owned by the user with the UID U002  not using the JOIN keyword
@@ -63,7 +63,7 @@ SQLQ[9] = "SELECT GID, UID, USERNAME FROM users ORDER BY GID DESC;"
 SQLA[9] ='[["GID", "UID", "USERNAME"], ["WellieWalker", "U004", "johnroberts"], ["TheWanderer", "U002", "annegrey"], ["MadCacher", "U001", "juliesmith"], ["GoneCaching", "U005", "sallydavis"], ["AlwaysLost", "U003", "davidwillis"]]'
 
 # display  GID, UID and USERNAME data for all users in GID ascendng order and rename colmns UID ID and username UN 
-SQLQ[10] = ""
+SQLQ[10] = "SELECT UID AS 'ID', USERNAME AS 'UN' FROM users ORDER BY GID ASC;"
 SQLA[10] ='[["ID", "UN"], ["U003", "davidwillis"], ["U005", "sallydavis"], ["U001", "juliesmith"], ["U002", "annegrey"], ["U004", "johnroberts"]]'
 
 # display the number of caches owned by the user with the UID U003
@@ -103,7 +103,10 @@ GROUP BY c.CACHEID;"
 SQLA[17] ='[["CACHEID", "Number of times not found"], ["C001", 1], ["C004", 1]]'
 
 # display the number of caches that each trackable have visited.
-SQLQ[18] = ""
+SQLQ[18] = "SELECT t.TID, COUNT(cl.CACHEID) as 'Number of caches visited'
+FROM trackables as t, clogs AS cl
+WHERE t.UID = cl.UID
+GROUP BY t.UID;"
 SQLA[18] ='[["TID", "Number of caches visited"], ["T001", 3], ["T002", 1]]'
 
 # display the UID, CACHEID, number of times cache found and date with which user acheived its 'first-time-found'.
